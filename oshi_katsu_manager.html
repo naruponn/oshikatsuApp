@@ -1,698 +1,712 @@
-
-<style>
-:root {
-  --p1: #fce4ec; --p2: #f8bbd0; --p3: #f48fb1; --p4: #ec407a;
-  --lav: #ede7f6; --lav2: #ce93d8; --lav3: #ab47bc;
-  --mint: #e8f5e9; --mint2: #a5d6a7; --mint3: #43a047;
-  --peach: #fff3e0; --peach2: #ffcc80; --peach3: #ef6c00;
-  --sky: #e3f2fd; --sky2: #90caf9; --sky3: #1e88e5;
-  --card-bg: var(--color-background-primary);
-  --radius: 16px;
-  --font: 'Zen Maru Gothic', sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font); }
-@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap');
-
-.app { max-width: 700px; margin: 0 auto; padding: 0 0 40px; }
-
-.header {
-  background: linear-gradient(135deg, #fce4ec 0%, #ede7f6 50%, #e3f2fd 100%);
-  padding: 20px 20px 0;
-  border-radius: 0 0 24px 24px;
-  margin-bottom: 16px;
-}
-.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.header h1 { font-size: 20px; font-weight: 700; color: #c2185b; }
-.header-sub { font-size: 12px; color: #ad1457; opacity: 0.7; }
-.nav { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 0; }
-.nav-btn {
-  flex-shrink: 0; border: none; background: transparent;
-  padding: 10px 16px; font-size: 13px; font-weight: 500;
-  color: #ad1457; cursor: pointer; border-radius: 12px 12px 0 0;
-  transition: all .2s; font-family: var(--font);
-}
-.nav-btn.active { background: var(--color-background-primary); color: #c2185b; box-shadow: 0 -2px 8px rgba(194,24,91,.1); }
-.nav-btn:hover:not(.active) { background: rgba(255,255,255,.5); }
-
-.tab { display: none; padding: 16px; }
-.tab.active { display: block; }
-
-/* --- OSHI PROFILE --- */
-.oshi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px; }
-.oshi-card {
-  background: var(--card-bg); border-radius: var(--radius);
-  border: 1.5px solid var(--p2); padding: 14px 12px;
-  text-align: center; cursor: pointer; transition: all .2s;
-  position: relative;
-}
-.oshi-card:hover { border-color: var(--p3); transform: translateY(-2px); }
-.oshi-card.selected { border-color: var(--p4); background: var(--p1); }
-.oshi-avatar {
-  width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; background: var(--p2);
-}
-.oshi-name { font-size: 13px; font-weight: 700; color: var(--color-text-primary); }
-.oshi-tag { font-size: 11px; color: #ad1457; margin-top: 2px; }
-.add-oshi-btn {
-  background: var(--card-bg); border: 1.5px dashed var(--p2);
-  border-radius: var(--radius); padding: 14px 12px;
-  text-align: center; cursor: pointer; color: #ec407a;
-  font-size: 12px; transition: all .2s; font-family: var(--font);
-}
-.add-oshi-btn:hover { border-color: var(--p3); background: var(--p1); }
-
-.section-title {
-  font-size: 14px; font-weight: 700; color: #c2185b;
-  margin: 0 0 10px; display: flex; align-items: center; gap: 6px;
-}
-.section-title i { font-size: 16px; }
-
-.pill { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
-.pill-pink { background: var(--p1); color: #ad1457; }
-.pill-lav { background: var(--lav); color: #6a1b9a; }
-.pill-mint { background: var(--mint); color: #1b5e20; }
-.pill-peach { background: var(--peach); color: #bf360c; }
-.pill-sky { background: var(--sky); color: #0d47a1; }
-
-/* --- MEMO / DIARY --- */
-.memo-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-.memo-card {
-  background: var(--card-bg); border-radius: var(--radius);
-  border: 1px solid var(--color-border-tertiary); padding: 14px 16px;
-  cursor: pointer; transition: all .2s;
-}
-.memo-card:hover { border-color: var(--p3); }
-.memo-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-.memo-title { font-size: 14px; font-weight: 700; color: var(--color-text-primary); }
-.memo-date { font-size: 11px; color: var(--color-text-secondary); }
-.memo-body { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
-
-.form-group { margin-bottom: 12px; }
-.form-label { font-size: 12px; font-weight: 500; color: #ad1457; margin-bottom: 4px; display: block; }
-.form-input, .form-textarea, .form-select {
-  width: 100%; padding: 9px 12px; border-radius: 10px;
-  border: 1.5px solid var(--p2); background: var(--color-background-primary);
-  font-size: 13px; font-family: var(--font); color: var(--color-text-primary);
-  transition: border-color .2s;
-}
-.form-input:focus, .form-textarea:focus, .form-select:focus {
-  outline: none; border-color: var(--p4);
-}
-.form-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
-
-.btn-pink {
-  background: #ec407a; color: white; border: none;
-  padding: 10px 20px; border-radius: 10px; font-size: 13px;
-  font-weight: 700; cursor: pointer; font-family: var(--font);
-  transition: all .2s;
-}
-.btn-pink:hover { background: #d81b60; }
-.btn-outline {
-  background: transparent; color: #ec407a;
-  border: 1.5px solid var(--p3); padding: 8px 16px;
-  border-radius: 10px; font-size: 13px; cursor: pointer;
-  font-family: var(--font); transition: all .2s;
-}
-.btn-outline:hover { background: var(--p1); }
-
-/* --- SCHEDULE --- */
-.schedule-list { display: flex; flex-direction: column; gap: 10px; }
-.schedule-card {
-  background: var(--card-bg); border-radius: var(--radius);
-  border-left: 4px solid #ec407a; padding: 14px 16px;
-  border-top: 1px solid var(--color-border-tertiary);
-  border-right: 1px solid var(--color-border-tertiary);
-  border-bottom: 1px solid var(--color-border-tertiary);
-}
-.schedule-card.meague { border-left-color: #ab47bc; }
-.schedule-card.release { border-left-color: #1e88e5; }
-.schedule-card.goods { border-left-color: #43a047; }
-.sched-row { display: flex; align-items: center; justify-content: space-between; }
-.sched-title { font-size: 14px; font-weight: 700; color: var(--color-text-primary); }
-.sched-date { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; }
-.sched-actions { display: flex; gap: 6px; margin-top: 8px; }
-
-/* --- FINANCE --- */
-.finance-summary {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px;
-}
-.stat-card {
-  background: var(--p1); border-radius: 14px; padding: 14px 12px; text-align: center;
-}
-.stat-card.lav { background: var(--lav); }
-.stat-card.mint { background: var(--mint); }
-.stat-label { font-size: 11px; color: #ad1457; font-weight: 500; }
-.stat-card.lav .stat-label { color: #6a1b9a; }
-.stat-card.mint .stat-label { color: #1b5e20; }
-.stat-value { font-size: 20px; font-weight: 700; color: #c2185b; margin-top: 4px; }
-.stat-card.lav .stat-value { color: #6a1b9a; }
-.stat-card.mint .stat-value { color: #1b5e20; }
-
-.expense-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
-.expense-item {
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--card-bg); border-radius: 12px;
-  border: 1px solid var(--color-border-tertiary); padding: 10px 14px;
-}
-.exp-left { display: flex; align-items: center; gap: 10px; }
-.exp-icon { font-size: 18px; width: 32px; text-align: center; }
-.exp-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
-.exp-cat { font-size: 11px; color: var(--color-text-secondary); }
-.exp-amount { font-size: 15px; font-weight: 700; color: #c2185b; }
-
-/* --- MEAGUE --- */
-.meague-header {
-  display: grid; grid-template-columns: 100px 1fr 1fr 1fr;
-  gap: 8px; padding: 8px 12px; background: var(--p2);
-  border-radius: 10px 10px 0 0; font-size: 12px; font-weight: 700; color: #880e4f;
-}
-.meague-row {
-  display: grid; grid-template-columns: 100px 1fr 1fr 1fr;
-  gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--color-border-tertiary);
-  background: var(--card-bg); align-items: center;
-}
-.meague-row:last-child { border-bottom: none; border-radius: 0 0 10px 10px; }
-.meague-row:hover { background: var(--p1); }
-.meague-date { font-size: 13px; font-weight: 600; color: var(--color-text-primary); }
-.meague-note-btn {
-  font-size: 11px; padding: 4px 10px; border-radius: 8px;
-  border: 1.5px solid var(--lav2); background: var(--lav);
-  color: #6a1b9a; cursor: pointer; font-family: var(--font); transition: all .2s;
-}
-.meague-note-btn:hover { background: var(--lav2); color: white; }
-.meague-table-wrap { border: 1.5px solid var(--p2); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
-
-/* Modal */
-.modal-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,.35); z-index: 100;
-  align-items: center; justify-content: center; padding: 20px;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--card-bg); border-radius: 20px; padding: 22px;
-  width: 100%; max-width: 460px; max-height: 80vh; overflow-y: auto;
-  box-shadow: 0 8px 32px rgba(0,0,0,.15);
-}
-.modal-title { font-size: 16px; font-weight: 700; color: #c2185b; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-.modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
-
-.bar-wrap { margin-bottom: 12px; }
-.bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
-.bar-track { height: 8px; background: var(--color-background-secondary); border-radius: 8px; overflow: hidden; }
-.bar-fill { height: 100%; border-radius: 8px; transition: width .5s; }
-
-.empty-state { text-align: center; padding: 32px 16px; color: var(--color-text-secondary); font-size: 13px; }
-.empty-state i { font-size: 36px; display: block; margin-bottom: 8px; opacity: .4; }
-</style>
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>推し活ノート🌸</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p1:#fce4ec;--p2:#f8bbd0;--p3:#f48fb1;--p4:#ec407a;--p5:#c2185b;
+  --lav:#ede7f6;--lav2:#ce93d8;--lav3:#ab47bc;
+  --mint:#e8f5e9;--mint2:#a5d6a7;--mint3:#43a047;
+  --sky:#e3f2fd;--sky2:#90caf9;--sky3:#1e88e5;
+  --peach:#fff3e0;--peach2:#ffcc80;
+  --bg:#fff9fb;--card:#ffffff;
+  --text:#2d1b24;--text2:#7a4a5a;--text3:#b07a8a;
+  --border:#f0c8d8;
+  --radius:14px;--font:'Zen Maru Gothic',sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
 
-<div class="app">
-  <div class="header">
-    <div class="header-top">
-      <div>
-        <h1>🌸 推し活ノート</h1>
-        <div class="header-sub">oshi katsudo manager</div>
-      </div>
-      <div style="font-size:22px">✨</div>
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,#fce4ec 0%,#ede7f6 60%,#e3f2fd 100%);
+  padding:16px 16px 0;position:sticky;top:0;z-index:50;
+  box-shadow:0 2px 12px rgba(236,64,122,.1);
+}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.header h1{font-size:18px;font-weight:700;color:var(--p5)}
+.gas-btn{
+  font-size:11px;padding:5px 10px;border-radius:8px;
+  border:1.5px solid var(--p3);background:white;color:var(--p4);
+  cursor:pointer;font-family:var(--font);font-weight:500;
+}
+.gas-btn:hover{background:var(--p1)}
+.nav{display:flex;gap:2px;overflow-x:auto;padding-bottom:0}
+.nav-btn{
+  flex-shrink:0;border:none;background:transparent;
+  padding:9px 14px;font-size:13px;font-weight:500;
+  color:var(--p5);cursor:pointer;border-radius:10px 10px 0 0;
+  transition:all .2s;font-family:var(--font);
+}
+.nav-btn.active{background:var(--bg);color:var(--p4);box-shadow:0 -2px 8px rgba(236,64,122,.12)}
+.nav-btn:hover:not(.active){background:rgba(255,255,255,.5)}
+
+/* MAIN */
+.main{max-width:700px;margin:0 auto;padding:16px}
+.tab{display:none}.tab.active{display:block}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:14px 16px;margin-bottom:10px}
+
+/* SECTION TITLE */
+.sec{font-size:13px;font-weight:700;color:var(--p5);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+
+/* PILLS */
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.pill-pink{background:var(--p1);color:var(--p5)}
+.pill-lav{background:var(--lav);color:#6a1b9a}
+.pill-mint{background:var(--mint);color:#1b5e20}
+.pill-sky{background:var(--sky);color:#0d47a1}
+
+/* BUTTONS */
+.btn{border:none;padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s}
+.btn-pink{background:var(--p4);color:white}.btn-pink:hover{background:var(--p5)}
+.btn-outline{background:transparent;color:var(--p4);border:1.5px solid var(--p3)}.btn-outline:hover{background:var(--p1)}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:8px}
+
+/* FORMS */
+.form-group{margin-bottom:11px}
+.form-label{font-size:12px;font-weight:500;color:var(--p5);margin-bottom:3px;display:block}
+.form-input,.form-textarea,.form-select{
+  width:100%;padding:8px 11px;border-radius:9px;
+  border:1.5px solid var(--p2);background:var(--card);
+  font-size:13px;font-family:var(--font);color:var(--text);transition:border-color .2s;
+}
+.form-input:focus,.form-textarea:focus,.form-select:focus{outline:none;border-color:var(--p4)}
+.form-textarea{resize:vertical;min-height:72px;line-height:1.6}
+
+/* SCHEDULE */
+.sched-card{
+  background:var(--card);border-radius:var(--radius);padding:14px 16px;
+  margin-bottom:10px;border-left:4px solid var(--p4);
+  border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.sched-card.meague{border-left-color:var(--lav3)}
+.sched-card.release{border-left-color:var(--sky3)}
+.sched-card.goods{border-left-color:var(--mint3)}
+.sched-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.sched-name{font-size:14px;font-weight:700;color:var(--text)}
+.sched-meta{font-size:12px;color:var(--text2);margin-top:3px}
+.countdown-box{
+  text-align:right;flex-shrink:0;
+}
+.countdown-num{font-size:20px;font-weight:700;color:var(--p4);line-height:1}
+.countdown-label{font-size:10px;color:var(--text3);margin-top:1px}
+.countdown-past{color:var(--text3);font-size:13px}
+.days-since{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* FINANCE */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.stat-card{border-radius:12px;padding:12px 10px;text-align:center}
+.stat-card.pink{background:var(--p1)}.stat-card.lav{background:var(--lav)}.stat-card.mint{background:var(--mint)}
+.stat-label{font-size:10px;font-weight:500;color:var(--p5)}
+.stat-card.lav .stat-label{color:#6a1b9a}.stat-card.mint .stat-label{color:#1b5e20}
+.stat-value{font-size:18px;font-weight:700;color:var(--p5);margin-top:3px}
+.stat-card.lav .stat-value{color:#6a1b9a}.stat-card.mint .stat-value{color:#1b5e20}
+.bar-wrap{margin-bottom:10px}
+.bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;color:var(--text)}
+.bar-track{height:7px;background:#f0e0e8;border-radius:8px;overflow:hidden}
+.bar-fill{height:100%;border-radius:8px;transition:width .5s}
+.exp-item{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--card);border-radius:11px;border:1px solid var(--border);
+  padding:9px 13px;margin-bottom:7px;
+}
+.exp-left{display:flex;align-items:center;gap:9px}
+.exp-icon{font-size:18px;width:28px;text-align:center}
+.exp-name{font-size:13px;font-weight:500;color:var(--text)}
+.exp-cat{font-size:11px;color:var(--text2)}
+.exp-amount{font-size:15px;font-weight:700;color:var(--p5)}
+
+/* MEAGUE */
+.mg-event-card{
+  background:var(--card);border-radius:var(--radius);border:1px solid var(--border);
+  margin-bottom:10px;overflow:hidden;
+}
+.mg-event-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 16px;cursor:pointer;transition:background .2s;
+  background:var(--card);
+}
+.mg-event-header:hover{background:var(--p1)}
+.mg-event-title{font-size:14px;font-weight:700;color:var(--text)}
+.mg-event-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.mg-chevron{font-size:16px;color:var(--text3);transition:transform .2s}
+.mg-event-card.open .mg-chevron{transform:rotate(180deg)}
+.mg-parts{display:none;border-top:1px solid var(--border)}
+.mg-event-card.open .mg-parts{display:block}
+
+.mg-part-row{border-bottom:1px solid var(--border);padding:10px 16px}
+.mg-part-row:last-child{border-bottom:none}
+.mg-part-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:6px;
+}
+.mg-part-label{font-size:12px;font-weight:700;color:var(--lav3)}
+.mg-add-entry{font-size:11px;padding:3px 9px;border-radius:6px;border:1.5px solid var(--lav2);background:var(--lav);color:var(--lav3);cursor:pointer;font-family:var(--font)}
+.mg-add-entry:hover{background:var(--lav2);color:white}
+.mg-entry{
+  background:#faf7fe;border-radius:9px;border:1px solid #e0d0f0;
+  padding:9px 11px;margin-bottom:6px;position:relative;
+}
+.mg-entry-meta{font-size:11px;color:var(--lav3);margin-bottom:5px;font-weight:500}
+.mg-entry-fields{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mg-field label{font-size:10px;color:var(--text3);display:block;margin-bottom:2px}
+.mg-field textarea{
+  width:100%;font-size:12px;font-family:var(--font);
+  border:1px solid #d0b8e0;border-radius:6px;padding:5px 7px;
+  resize:vertical;min-height:52px;background:white;color:var(--text);line-height:1.5;
+}
+.mg-field textarea:focus{outline:none;border-color:var(--lav3)}
+.mg-field.full{grid-column:1/-1}
+.mg-del-btn{
+  position:absolute;top:6px;right:8px;
+  background:none;border:none;font-size:14px;color:#ccc;cursor:pointer;
+}
+.mg-del-btn:hover{color:#e91e63}
+.mg-member-row{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.mg-member-input{flex:1;font-size:12px;font-family:var(--font);border:1px solid var(--p2);border-radius:7px;padding:4px 8px;background:white;color:var(--text)}
+.mg-member-input:focus{outline:none;border-color:var(--p4)}
+
+/* MODAL */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);
+  z-index:200;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--card);border-radius:20px;padding:20px;
+  width:100%;max-width:460px;max-height:85vh;overflow-y:auto;
+  box-shadow:0 8px 32px rgba(0,0,0,.15);
+}
+.modal-title{font-size:15px;font-weight:700;color:var(--p5);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+
+/* GAS SETUP MODAL */
+.gas-setup{font-size:13px;line-height:1.8;color:var(--text)}
+.gas-step{
+  background:var(--p1);border-radius:10px;padding:10px 13px;margin-bottom:10px;
+}
+.gas-step-num{font-size:11px;font-weight:700;color:var(--p5);margin-bottom:4px}
+.gas-code{
+  background:#2d1b24;color:#f8bbd0;border-radius:8px;padding:10px;
+  font-size:11px;font-family:monospace;overflow-x:auto;margin:6px 0;white-space:pre;
+}
+.gas-url-input{width:100%;padding:8px 11px;border-radius:9px;border:1.5px solid var(--p2);font-size:13px;font-family:var(--font);margin-top:6px}
+.gas-url-input:focus{outline:none;border-color:var(--p4)}
+
+.empty-state{text-align:center;padding:28px 16px;color:var(--text2);font-size:13px}
+.empty-state i{font-size:32px;display:block;margin-bottom:6px;opacity:.3}
+
+.row-flex{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <h1>🌸 推し活ノート</h1>
+    <button class="gas-btn" onclick="openGasSetup()">⚡ スプレッドシート設定</button>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showTab('memo',this)">📖 メモ</button>
+    <button class="nav-btn" onclick="showTab('schedule',this)">📅 日程</button>
+    <button class="nav-btn" onclick="showTab('finance',this)">💰 費用</button>
+    <button class="nav-btn" onclick="showTab('meague',this)">🤝 ミーグリ</button>
+  </nav>
+</div>
+
+<div class="main">
+
+  <!-- メモ -->
+  <div id="tab-memo" class="tab active">
+    <div class="row-flex">
+      <div class="sec" style="margin:0">📖 メモ一覧</div>
+      <button class="btn btn-pink btn-sm" onclick="openModal('modal-memo')">＋ 追加</button>
     </div>
-    <nav class="nav">
-      <button class="nav-btn active" onclick="showTab('profile')"><i class="ti ti-star"></i> 推し</button>
-      <button class="nav-btn" onclick="showTab('memo')"><i class="ti ti-notebook"></i> メモ</button>
-      <button class="nav-btn" onclick="showTab('schedule')"><i class="ti ti-calendar"></i> 日程</button>
-      <button class="nav-btn" onclick="showTab('finance')"><i class="ti ti-coin"></i> 費用</button>
-      <button class="nav-btn" onclick="showTab('meague')"><i class="ti ti-users"></i> ミーグリ</button>
-    </nav>
+    <div id="memo-list"></div>
   </div>
 
-  <!-- 推しプロフィール -->
-  <div id="tab-profile" class="tab active">
-    <div class="section-title"><i class="ti ti-star-filled" style="color:#ec407a"></i> 推し一覧</div>
-    <div class="oshi-grid" id="oshi-grid"></div>
-    <button class="add-oshi-btn" onclick="openAddOshi()"><i class="ti ti-plus"></i> 推しを追加</button>
-
-    <div id="oshi-detail" style="display:none; margin-top:16px">
-      <div class="section-title"><i class="ti ti-info-circle"></i> <span id="oshi-detail-name"></span></div>
-      <div id="oshi-detail-body" style="background:var(--p1);border-radius:var(--radius);padding:14px"></div>
-    </div>
-  </div>
-
-  <!-- メモ・日記 -->
-  <div id="tab-memo" class="tab">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div class="section-title" style="margin:0"><i class="ti ti-notebook" style="color:#ec407a"></i> メモ一覧</div>
-      <button class="btn-pink" onclick="openAddMemo()"><i class="ti ti-plus"></i> 追加</button>
-    </div>
-    <div class="memo-list" id="memo-list"></div>
-  </div>
-
-  <!-- スケジュール -->
+  <!-- 日程 -->
   <div id="tab-schedule" class="tab">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div class="section-title" style="margin:0"><i class="ti ti-calendar" style="color:#ec407a"></i> イベント日程</div>
-      <button class="btn-pink" onclick="openAddSchedule()"><i class="ti ti-plus"></i> 追加</button>
+    <div class="row-flex">
+      <div class="sec" style="margin:0">📅 イベント日程</div>
+      <button class="btn btn-pink btn-sm" onclick="openModal('modal-schedule')">＋ 追加</button>
     </div>
-    <div class="schedule-list" id="schedule-list"></div>
+    <div id="schedule-list"></div>
   </div>
 
   <!-- 費用 -->
   <div id="tab-finance" class="tab">
-    <div class="finance-summary">
-      <div class="stat-card">
-        <div class="stat-label">今月の合計</div>
-        <div class="stat-value" id="total-month">¥0</div>
-      </div>
-      <div class="stat-card lav">
-        <div class="stat-label">今年の合計</div>
-        <div class="stat-value" id="total-year">¥0</div>
-      </div>
-      <div class="stat-card mint">
-        <div class="stat-label">記録件数</div>
-        <div class="stat-value" id="total-count">0</div>
-      </div>
+    <div class="stat-grid">
+      <div class="stat-card pink"><div class="stat-label">今月合計</div><div class="stat-value" id="total-month">¥0</div></div>
+      <div class="stat-card lav"><div class="stat-label">今年合計</div><div class="stat-value" id="total-year">¥0</div></div>
+      <div class="stat-card mint"><div class="stat-label">記録件数</div><div class="stat-value" id="total-count">0</div></div>
     </div>
-
-    <div class="section-title"><i class="ti ti-chart-bar" style="color:#ec407a"></i> カテゴリ別</div>
-    <div id="category-bars" style="margin-bottom:16px"></div>
-
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <div class="section-title" style="margin:0"><i class="ti ti-list" style="color:#ec407a"></i> 支出履歴</div>
-      <button class="btn-pink" onclick="openAddExpense()"><i class="ti ti-plus"></i> 追加</button>
+    <div class="sec">📊 カテゴリ別</div>
+    <div id="cat-bars" style="margin-bottom:14px"></div>
+    <div class="row-flex">
+      <div class="sec" style="margin:0">💳 支出履歴</div>
+      <button class="btn btn-pink btn-sm" onclick="openModal('modal-expense')">＋ 追加</button>
     </div>
-    <div class="expense-list" id="expense-list"></div>
+    <div id="expense-list"></div>
   </div>
 
   <!-- ミーグリ -->
   <div id="tab-meague" class="tab">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div class="section-title" style="margin:0"><i class="ti ti-users" style="color:#ec407a"></i> ミーグリ日程</div>
-      <button class="btn-pink" onclick="openAddMeague()"><i class="ti ti-plus"></i> 追加</button>
+    <div class="row-flex">
+      <div class="sec" style="margin:0">🤝 ミーグリ記録</div>
+      <button class="btn btn-pink btn-sm" onclick="openModal('modal-add-meague')">＋ イベント追加</button>
     </div>
-    <div class="meague-table-wrap">
-      <div class="meague-header">
-        <div>日付</div><div>イベント名</div><div>推し</div><div>メモ</div>
-      </div>
-      <div id="meague-list"></div>
-    </div>
+    <div id="meague-list"></div>
   </div>
+
 </div>
 
-<!-- Modals -->
-<div class="modal-overlay" id="modal-oshi">
-  <div class="modal">
-    <div class="modal-title"><i class="ti ti-star"></i> 推しを追加</div>
-    <div class="form-group"><label class="form-label">名前</label><input class="form-input" id="oshi-name-in" placeholder="例: 田中くん"></div>
-    <div class="form-group"><label class="form-label">グループ・ユニット</label><input class="form-input" id="oshi-group-in" placeholder="例: ××× "></div>
-    <div class="form-group"><label class="form-label">絵文字アバター</label><input class="form-input" id="oshi-emoji-in" placeholder="例: 🌸" style="font-size:20px"></div>
-    <div class="form-group"><label class="form-label">推しカラー</label>
-      <select class="form-select" id="oshi-color-in">
-        <option value="pink">ピンク</option><option value="lav">ラベンダー</option>
-        <option value="mint">ミント</option><option value="sky">スカイ</option><option value="peach">ピーチ</option>
-      </select>
-    </div>
-    <div class="form-group"><label class="form-label">メモ</label><textarea class="form-textarea" id="oshi-memo-in" placeholder="推しのいいところ…"></textarea></div>
-    <div class="modal-footer">
-      <button class="btn-outline" onclick="closeModal('modal-oshi')">キャンセル</button>
-      <button class="btn-pink" onclick="saveOshi()">保存</button>
-    </div>
-  </div>
-</div>
+<!-- ===== MODALS ===== -->
 
+<!-- メモ追加 -->
 <div class="modal-overlay" id="modal-memo">
   <div class="modal">
-    <div class="modal-title"><i class="ti ti-notebook"></i> <span id="memo-modal-title">メモを追加</span></div>
-    <div class="form-group"><label class="form-label">タイトル</label><input class="form-input" id="memo-title-in" placeholder="例: ライブ感想"></div>
-    <div class="form-group"><label class="form-label">日付</label><input class="form-input" type="date" id="memo-date-in"></div>
-    <div class="form-group"><label class="form-label">推し</label><select class="form-select" id="memo-oshi-in"></select></div>
+    <div class="modal-title">📖 メモを追加</div>
+    <div class="form-group"><label class="form-label">タイトル</label><input class="form-input" id="m-title" placeholder="例: ライブ感想"></div>
+    <div class="form-group"><label class="form-label">日付</label><input class="form-input" type="date" id="m-date"></div>
     <div class="form-group"><label class="form-label">カテゴリ</label>
-      <select class="form-select" id="memo-cat-in">
-        <option value="ライブ感想">🎤 ライブ感想</option><option value="グッズ">🛍 グッズ</option>
-        <option value="日記">📖 日記</option><option value="情報メモ">💡 情報メモ</option><option value="その他">📝 その他</option>
+      <select class="form-select" id="m-cat">
+        <option value="🎤 ライブ感想">🎤 ライブ感想</option>
+        <option value="🛍 グッズ">🛍 グッズ</option>
+        <option value="📖 日記">📖 日記</option>
+        <option value="💡 情報メモ">💡 情報メモ</option>
+        <option value="📝 その他">📝 その他</option>
       </select>
     </div>
-    <div class="form-group"><label class="form-label">内容</label><textarea class="form-textarea" id="memo-body-in" placeholder="感想・気持ち…" style="min-height:120px"></textarea></div>
+    <div class="form-group"><label class="form-label">内容</label><textarea class="form-textarea" id="m-body" placeholder="感想・気持ち…" style="min-height:100px"></textarea></div>
     <div class="modal-footer">
-      <button class="btn-outline" onclick="closeModal('modal-memo')">キャンセル</button>
-      <button class="btn-pink" onclick="saveMemo()">保存</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-memo')">キャンセル</button>
+      <button class="btn btn-pink" onclick="saveMemo()">保存</button>
     </div>
   </div>
 </div>
 
+<!-- 日程追加 -->
 <div class="modal-overlay" id="modal-schedule">
   <div class="modal">
-    <div class="modal-title"><i class="ti ti-calendar"></i> イベントを追加</div>
-    <div class="form-group"><label class="form-label">イベント名</label><input class="form-input" id="sched-title-in" placeholder="例: ○○ライブ"></div>
-    <div class="form-group"><label class="form-label">日付</label><input class="form-input" type="date" id="sched-date-in"></div>
+    <div class="modal-title">📅 イベントを追加</div>
+    <div class="form-group"><label class="form-label">イベント名</label><input class="form-input" id="s-title" placeholder="例: サマーライブ"></div>
+    <div class="form-group"><label class="form-label">日付</label><input class="form-input" type="date" id="s-date"></div>
     <div class="form-group"><label class="form-label">種類</label>
-      <select class="form-select" id="sched-type-in">
-        <option value="live">🎤 ライブ</option><option value="meague">🤝 ミーグリ</option>
-        <option value="release">💿 リリース</option><option value="goods">🛍 グッズ</option><option value="other">📅 その他</option>
+      <select class="form-select" id="s-type">
+        <option value="🎤 ライブ">🎤 ライブ</option>
+        <option value="🤝 ミーグリ">🤝 ミーグリ</option>
+        <option value="💿 リリース">💿 リリース</option>
+        <option value="🛍 グッズ">🛍 グッズ</option>
+        <option value="📅 その他">📅 その他</option>
       </select>
     </div>
-    <div class="form-group"><label class="form-label">推し</label><select class="form-select" id="sched-oshi-in"></select></div>
-    <div class="form-group"><label class="form-label">場所・詳細</label><input class="form-input" id="sched-venue-in" placeholder="例: 東京ドーム"></div>
-    <div class="form-group"><label class="form-label">メモ</label><textarea class="form-textarea" id="sched-note-in" placeholder="準備リスト・チケット番号など…"></textarea></div>
+    <div class="form-group"><label class="form-label">場所</label><input class="form-input" id="s-venue" placeholder="例: 東京ドーム"></div>
+    <div class="form-group"><label class="form-label">メモ</label><textarea class="form-textarea" id="s-note" placeholder="チケット番号・準備リスト…"></textarea></div>
     <div class="modal-footer">
-      <button class="btn-outline" onclick="closeModal('modal-schedule')">キャンセル</button>
-      <button class="btn-pink" onclick="saveSchedule()">保存</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-schedule')">キャンセル</button>
+      <button class="btn btn-pink" onclick="saveSchedule()">保存</button>
     </div>
   </div>
 </div>
 
+<!-- 費用追加 -->
 <div class="modal-overlay" id="modal-expense">
   <div class="modal">
-    <div class="modal-title"><i class="ti ti-coin"></i> 支出を追加</div>
-    <div class="form-group"><label class="form-label">内容</label><input class="form-input" id="exp-name-in" placeholder="例: グッズ購入"></div>
-    <div class="form-group"><label class="form-label">金額 (円)</label><input class="form-input" type="number" id="exp-amount-in" placeholder="例: 3500"></div>
-    <div class="form-group"><label class="form-label">日付</label><input class="form-input" type="date" id="exp-date-in"></div>
+    <div class="modal-title">💰 支出を追加</div>
+    <div class="form-group"><label class="form-label">内容</label><input class="form-input" id="e-name" placeholder="例: グッズ購入"></div>
+    <div class="form-group"><label class="form-label">金額（円）</label><input class="form-input" type="number" id="e-amount" placeholder="例: 3500"></div>
+    <div class="form-group"><label class="form-label">日付</label><input class="form-input" type="date" id="e-date"></div>
     <div class="form-group"><label class="form-label">カテゴリ</label>
-      <select class="form-select" id="exp-cat-in">
-        <option value="グッズ">🛍 グッズ</option><option value="チケット">🎟 チケット</option>
-        <option value="交通費">🚅 交通費</option><option value="配信">📺 配信・サブスク</option>
-        <option value="食事">🍱 食事</option><option value="その他">💳 その他</option>
+      <select class="form-select" id="e-cat">
+        <option value="🛍 グッズ">🛍 グッズ</option>
+        <option value="🎟 チケット">🎟 チケット</option>
+        <option value="🚅 交通費">🚅 交通費</option>
+        <option value="📺 配信">📺 配信・サブスク</option>
+        <option value="🍱 食事">🍱 食事</option>
+        <option value="💳 その他">💳 その他</option>
       </select>
     </div>
-    <div class="form-group"><label class="form-label">推し</label><select class="form-select" id="exp-oshi-in"></select></div>
     <div class="modal-footer">
-      <button class="btn-outline" onclick="closeModal('modal-expense')">キャンセル</button>
-      <button class="btn-pink" onclick="saveExpense()">保存</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-expense')">キャンセル</button>
+      <button class="btn btn-pink" onclick="saveExpense()">保存</button>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-meague">
+<!-- ミーグリ イベント追加 -->
+<div class="modal-overlay" id="modal-add-meague">
   <div class="modal">
-    <div class="modal-title"><i class="ti ti-users"></i> ミーグリを追加</div>
-    <div class="form-group"><label class="form-label">イベント名</label><input class="form-input" id="mg-event-in" placeholder="例: 〇〇サイン会"></div>
-    <div class="form-group"><label class="form-label">日付</label><input class="form-input" type="date" id="mg-date-in"></div>
-    <div class="form-group"><label class="form-label">推し</label><select class="form-select" id="mg-oshi-in"></select></div>
-    <div class="form-group"><label class="form-label">話したいこと</label><textarea class="form-textarea" id="mg-want-in" placeholder="伝えたいこと・聞きたいこと…"></textarea></div>
+    <div class="modal-title">🤝 ミーグリイベントを追加</div>
+    <div class="form-group"><label class="form-label">イベント名</label><input class="form-input" id="mg-event" placeholder="例: 春のサイン会"></div>
+    <div class="form-group"><label class="form-label">日付</label><input class="form-input" type="date" id="mg-date"></div>
+    <div class="form-group"><label class="form-label">部数（最大6）</label>
+      <select class="form-select" id="mg-parts">
+        <option value="1">1部</option><option value="2">2部</option><option value="3">3部</option>
+        <option value="4">4部</option><option value="5">5部</option><option value="6">6部</option>
+      </select>
+    </div>
     <div class="modal-footer">
-      <button class="btn-outline" onclick="closeModal('modal-meague')">キャンセル</button>
-      <button class="btn-pink" onclick="saveMeague()">保存</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-add-meague')">キャンセル</button>
+      <button class="btn btn-pink" onclick="saveMeagueEvent()">追加</button>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-meague-note">
+<!-- GAS設定 -->
+<div class="modal-overlay" id="modal-gas">
   <div class="modal">
-    <div class="modal-title"><i class="ti ti-edit"></i> ミーグリメモ</div>
-    <div id="mg-note-header" style="margin-bottom:12px;font-size:13px;color:var(--color-text-secondary)"></div>
-    <div class="form-group"><label class="form-label">話したいこと</label><textarea class="form-textarea" id="mg-note-want"></textarea></div>
-    <div class="form-group"><label class="form-label">話したこと・実際の会話</label><textarea class="form-textarea" id="mg-note-talked"></textarea></div>
-    <div class="form-group"><label class="form-label">反省・次回への準備</label><textarea class="form-textarea" id="mg-note-reflection"></textarea></div>
-    <div class="form-group"><label class="form-label">推しの反応・印象</label><textarea class="form-textarea" id="mg-note-reaction"></textarea></div>
+    <div class="modal-title">⚡ Googleスプレッドシート連携設定</div>
+    <div class="gas-setup">
+      <div class="gas-step">
+        <div class="gas-step-num">STEP 1 — Googleスプレッドシートを新規作成</div>
+        <a href="https://sheets.new" target="_blank" style="color:var(--p4);font-size:13px">▶ sheets.new を開く</a>してシートを作る。シート名は何でもOK。
+      </div>
+      <div class="gas-step">
+        <div class="gas-step-num">STEP 2 — Apps Script を開く</div>
+        メニュー「拡張機能」→「Apps Script」をクリック。
+      </div>
+      <div class="gas-step">
+        <div class="gas-step-num">STEP 3 — 下のコードを貼り付けて保存（Ctrl+S）</div>
+        <div class="gas-code">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet();
+  var data = JSON.parse(e.postData.contents);
+  var tab = sheet.getSheetByName(data.sheet)
+       || sheet.insertSheet(data.sheet);
+  if (tab.getLastRow() === 0) {
+    tab.appendRow(data.headers);
+  }
+  tab.appendRow(data.row);
+  return ContentService
+    .createTextOutput(JSON.stringify({status:'ok'}))
+    .setMimeType(ContentService.MimeType.JSON);
+}</div>
+      </div>
+      <div class="gas-step">
+        <div class="gas-step-num">STEP 4 — デプロイ</div>
+        右上「デプロイ」→「新しいデプロイ」→ 種類「ウェブアプリ」→<br>
+        「アクセスできるユーザー」を <strong>「全員」</strong> に変更 → 「デプロイ」ボタン押す。<br>
+        表示されたURLをコピー。
+      </div>
+      <div class="gas-step">
+        <div class="gas-step-num">STEP 5 — URLを下に貼り付けて保存</div>
+        <input class="gas-url-input" id="gas-url-input" placeholder="https://script.google.com/macros/s/..." value="">
+      </div>
+    </div>
     <div class="modal-footer">
-      <button class="btn-outline" onclick="closeModal('modal-meague-note')">キャンセル</button>
-      <button class="btn-pink" onclick="saveMeagueNote()">保存</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-gas')">キャンセル</button>
+      <button class="btn btn-pink" onclick="saveGasUrl()">URLを保存</button>
     </div>
   </div>
 </div>
 
 <script>
-const COLORS = {
-  pink:  { bg: '#fce4ec', border: '#f48fb1', avatar: '#f8bbd0' },
-  lav:   { bg: '#ede7f6', border: '#ce93d8', avatar: '#e1bee7' },
-  mint:  { bg: '#e8f5e9', border: '#a5d6a7', avatar: '#c8e6c9' },
-  sky:   { bg: '#e3f2fd', border: '#90caf9', avatar: '#bbdefb' },
-  peach: { bg: '#fff3e0', border: '#ffcc80', avatar: '#ffe0b2' },
-};
-const CAT_ICONS = {
-  'グッズ':'🛍','チケット':'🎟','交通費':'🚅','配信':'📺','食事':'🍱','その他':'💳'
-};
-const SCHED_LABELS = { live:'🎤 ライブ', meague:'🤝 ミーグリ', release:'💿 リリース', goods:'🛍 グッズ', other:'📅 その他' };
-
+// ===== STATE =====
 let state = {
-  oshis: [
-    { id:1, name:'推しちゃん', group:'', emoji:'🌸', color:'pink', memo:'大好き！' }
-  ],
-  memos: [
-    { id:1, title:'初めてのライブ感想', date:'2025-05-10', oshi:'推しちゃん', cat:'ライブ感想', body:'最高だった！最前列でかわいさが爆発してた。また絶対行く🌸' }
-  ],
-  schedules: [
-    { id:1, title:'サマーライブ', date:'2025-07-20', type:'live', oshi:'推しちゃん', venue:'横浜アリーナ', note:'チケット当選済み！' }
-  ],
-  expenses: [
-    { id:1, name:'写真集', amount:3500, date:'2025-05-01', cat:'グッズ', oshi:'推しちゃん' },
-    { id:2, name:'ライブチケット', amount:9800, date:'2025-05-10', cat:'チケット', oshi:'推しちゃん' },
-  ],
-  meagues: [
-    { id:1, event:'春のサイン会', date:'2025-04-15', oshi:'推しちゃん', want:'好きな食べ物を聞く', talked:'ラーメンが好きって言ってた💕', reflection:'次はもっと笑顔で！', reaction:'こっちを見てにっこりしてくれた' }
-  ]
+  memos: [],
+  schedules: [],
+  expenses: [],
+  meagues: [],   // {id, event, date, parts(1-6), entries:[{part,member,want,talked,reflection,reaction}]}
+  gasUrl: ''
 };
-let editingMeagueId = null;
 
-function save() { try { localStorage.setItem('oshi_state', JSON.stringify(state)); } catch(e){} }
-function load() { try { const s = localStorage.getItem('oshi_state'); if(s) state = JSON.parse(s); } catch(e){} }
-load();
+function saveState(){ try{ localStorage.setItem('oshi2',JSON.stringify(state)); }catch(e){} }
+function loadState(){ try{ const s=localStorage.getItem('oshi2'); if(s) state=JSON.parse(s); }catch(e){} }
+loadState();
 
-function showTab(t) {
-  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('tab-' + t).classList.add('active');
-  event.currentTarget.classList.add('active');
-  render();
+// ===== TAB =====
+function showTab(name, btn){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+  renderAll();
 }
 
-function render() {
-  renderOshis(); renderMemos(); renderSchedules(); renderFinance(); renderMeagues();
+function renderAll(){ renderMemos(); renderSchedules(); renderFinance(); renderMeagues(); }
+
+// ===== MODAL =====
+function openModal(id){
+  const d=new Date().toISOString().slice(0,10);
+  if(id==='modal-memo') document.getElementById('m-date').value=d;
+  if(id==='modal-schedule') document.getElementById('s-date').value=d;
+  if(id==='modal-expense') document.getElementById('e-date').value=d;
+  if(id==='modal-add-meague') document.getElementById('mg-date').value=d;
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(el=>{
+  el.addEventListener('click',e=>{ if(e.target===el) el.classList.remove('open'); });
+});
+
+// ===== GAS =====
+function openGasSetup(){
+  document.getElementById('gas-url-input').value = state.gasUrl||'';
+  openModal('modal-gas');
+}
+function saveGasUrl(){
+  state.gasUrl = document.getElementById('gas-url-input').value.trim();
+  saveState();
+  closeModal('modal-gas');
+  alert('URLを保存しました！');
+}
+async function sendToGas(sheetName, headers, row){
+  if(!state.gasUrl) return;
+  try{
+    await fetch(state.gasUrl, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({sheet:sheetName, headers, row})
+    });
+  }catch(e){ console.log('GAS送信エラー',e); }
 }
 
-function renderOshis() {
-  const grid = document.getElementById('oshi-grid');
-  grid.innerHTML = state.oshis.map(o => {
-    const c = COLORS[o.color] || COLORS.pink;
-    return `<div class="oshi-card" style="border-color:${c.border}" onclick="showOshiDetail(${o.id})">
-      <div class="oshi-avatar" style="background:${c.avatar}">${o.emoji || '🌸'}</div>
-      <div class="oshi-name">${o.name}</div>
-      <div class="oshi-tag">${o.group || ''}</div>
-    </div>`;
-  }).join('');
+// ===== MEMO =====
+function saveMemo(){
+  const title=document.getElementById('m-title').value.trim();
+  if(!title) return;
+  const memo={id:Date.now(), title, date:document.getElementById('m-date').value,
+    cat:document.getElementById('m-cat').value, body:document.getElementById('m-body').value.trim()};
+  state.memos.push(memo); saveState();
+  sendToGas('メモ',['ID','タイトル','日付','カテゴリ','内容'],[memo.id,memo.title,memo.date,memo.cat,memo.body]);
+  closeModal('modal-memo'); renderMemos();
+  ['m-title','m-body'].forEach(id=>document.getElementById(id).value='');
 }
-
-function showOshiDetail(id) {
-  const o = state.oshis.find(x => x.id === id);
-  if (!o) return;
-  const c = COLORS[o.color] || COLORS.pink;
-  document.getElementById('oshi-detail-name').textContent = o.name;
-  const cnt = state.expenses.filter(e => e.oshi === o.name).reduce((s,e) => s+e.amount, 0);
-  const events = state.schedules.filter(s => s.oshi === o.name).length;
-  document.getElementById('oshi-detail-body').innerHTML = `
-    <div style="display:flex;gap:12px;margin-bottom:10px">
-      <div style="text-align:center;flex:1;background:white;border-radius:10px;padding:10px">
-        <div style="font-size:11px;color:#ad1457">推し活費用</div>
-        <div style="font-size:18px;font-weight:700;color:#c2185b">¥${cnt.toLocaleString()}</div>
+function renderMemos(){
+  const list=document.getElementById('memo-list');
+  if(!state.memos.length){ list.innerHTML='<div class="empty-state"><i class="ti ti-notebook"></i>まだメモがありません</div>'; return; }
+  list.innerHTML=state.memos.slice().reverse().map(m=>`
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div><span class="pill pill-pink">${m.cat}</span></div>
+        <div style="font-size:11px;color:var(--text3)">${m.date}</div>
       </div>
-      <div style="text-align:center;flex:1;background:white;border-radius:10px;padding:10px">
-        <div style="font-size:11px;color:#ad1457">イベント数</div>
-        <div style="font-size:18px;font-weight:700;color:#c2185b">${events}件</div>
-      </div>
-    </div>
-    ${o.memo ? `<div style="font-size:13px;color:#880e4f;line-height:1.7">${o.memo}</div>` : ''}
-  `;
-  document.getElementById('oshi-detail').style.display = 'block';
-}
-
-function renderMemos() {
-  const list = document.getElementById('memo-list');
-  if (!state.memos.length) {
-    list.innerHTML = '<div class="empty-state"><i class="ti ti-notebook"></i>まだメモがありません</div>'; return;
-  }
-  list.innerHTML = state.memos.slice().reverse().map(m => `
-    <div class="memo-card">
-      <div class="memo-header">
-        <div>
-          <span class="pill pill-pink">${m.cat}</span>
-          ${m.oshi ? `<span class="pill pill-lav" style="margin-left:4px">${m.oshi}</span>` : ''}
-        </div>
-        <div class="memo-date">${m.date}</div>
-      </div>
-      <div class="memo-title" style="margin-bottom:4px">${m.title}</div>
-      <div class="memo-body">${m.body}</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:4px">${m.title}</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6">${m.body}</div>
     </div>
   `).join('');
 }
 
-function renderSchedules() {
-  const list = document.getElementById('schedule-list');
-  const sorted = state.schedules.slice().sort((a,b) => a.date.localeCompare(b.date));
-  if (!sorted.length) {
-    list.innerHTML = '<div class="empty-state"><i class="ti ti-calendar"></i>まだ予定がありません</div>'; return;
-  }
-  list.innerHTML = sorted.map(s => {
-    const typeClass = {live:'',meague:'meague',release:'release',goods:'goods',other:''}[s.type] || '';
-    return `<div class="schedule-card ${typeClass}">
-      <div class="sched-row">
+// ===== SCHEDULE =====
+function saveSchedule(){
+  const title=document.getElementById('s-title').value.trim();
+  if(!title) return;
+  const s={id:Date.now(), title, date:document.getElementById('s-date').value,
+    type:document.getElementById('s-type').value,
+    venue:document.getElementById('s-venue').value.trim(),
+    note:document.getElementById('s-note').value.trim()};
+  state.schedules.push(s); saveState();
+  sendToGas('日程',['ID','イベント名','日付','種類','場所','メモ'],[s.id,s.title,s.date,s.type,s.venue,s.note]);
+  closeModal('modal-schedule'); renderSchedules();
+  ['s-title','s-venue','s-note'].forEach(id=>document.getElementById(id).value='');
+}
+
+function daysDiff(dateStr){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const target=new Date(dateStr); target.setHours(0,0,0,0);
+  return Math.round((target-today)/(1000*60*60*24));
+}
+
+function renderSchedules(){
+  const list=document.getElementById('schedule-list');
+  const sorted=state.schedules.slice().sort((a,b)=>a.date.localeCompare(b.date));
+  if(!sorted.length){ list.innerHTML='<div class="empty-state"><i class="ti ti-calendar"></i>まだ予定がありません</div>'; return; }
+  list.innerHTML=sorted.map(s=>{
+    const diff=daysDiff(s.date);
+    const typeClass=s.type.includes('ミーグリ')?'meague':s.type.includes('リリース')?'release':s.type.includes('グッズ')?'goods':'';
+    let countdownHtml='';
+    if(diff>0){
+      countdownHtml=`<div class="countdown-box"><div class="countdown-num">あと${diff}</div><div class="countdown-label">日</div></div>`;
+    } else if(diff===0){
+      countdownHtml=`<div class="countdown-box"><div class="countdown-num" style="color:#e53935">TODAY!</div></div>`;
+    } else {
+      countdownHtml=`<div class="countdown-box"><div class="countdown-past">${Math.abs(diff)}日前</div></div>`;
+    }
+    return `<div class="sched-card ${typeClass}">
+      <div class="sched-title-row">
         <div>
-          <div class="sched-title">${SCHED_LABELS[s.type] || '📅'} ${s.title}</div>
-          <div class="sched-date"><i class="ti ti-calendar" style="font-size:12px"></i> ${s.date}${s.venue ? ' • ' + s.venue : ''}</div>
+          <div class="sched-name">${s.type} ${s.title}</div>
+          <div class="sched-meta">📆 ${s.date}${s.venue?' • '+s.venue:''}</div>
+          ${s.note?`<div style="font-size:11px;color:var(--text3);margin-top:3px">${s.note}</div>`:''}
         </div>
-        ${s.oshi ? `<span class="pill pill-pink">${s.oshi}</span>` : ''}
+        ${countdownHtml}
       </div>
-      ${s.note ? `<div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px">${s.note}</div>` : ''}
     </div>`;
   }).join('');
 }
 
-function renderFinance() {
-  const now = new Date();
-  const thisMonth = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  const monthTotal = state.expenses.filter(e => e.date && e.date.startsWith(thisMonth)).reduce((s,e)=>s+Number(e.amount),0);
-  const yearTotal = state.expenses.filter(e => e.date && e.date.startsWith(String(now.getFullYear()))).reduce((s,e)=>s+Number(e.amount),0);
-  document.getElementById('total-month').textContent = '¥' + monthTotal.toLocaleString();
-  document.getElementById('total-year').textContent = '¥' + yearTotal.toLocaleString();
-  document.getElementById('total-count').textContent = state.expenses.length;
-
-  const catTotals = {};
-  state.expenses.forEach(e => { catTotals[e.cat] = (catTotals[e.cat]||0) + Number(e.amount); });
-  const maxVal = Math.max(...Object.values(catTotals), 1);
-  const colors = ['#ec407a','#ab47bc','#42a5f5','#66bb6a','#ffa726','#ef5350'];
-  document.getElementById('category-bars').innerHTML = Object.entries(catTotals).map(([cat,val],i) => `
+// ===== FINANCE =====
+const CAT_COLORS=['#ec407a','#ab47bc','#42a5f5','#66bb6a','#ffa726','#ef5350'];
+function saveExpense(){
+  const name=document.getElementById('e-name').value.trim();
+  const amount=Number(document.getElementById('e-amount').value);
+  if(!name||!amount) return;
+  const ex={id:Date.now(), name, amount, date:document.getElementById('e-date').value, cat:document.getElementById('e-cat').value};
+  state.expenses.push(ex); saveState();
+  sendToGas('費用',['ID','内容','金額','日付','カテゴリ'],[ex.id,ex.name,ex.amount,ex.date,ex.cat]);
+  closeModal('modal-expense'); renderFinance();
+  ['e-name','e-amount'].forEach(id=>document.getElementById(id).value='');
+}
+function renderFinance(){
+  const now=new Date();
+  const ym=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const yr=String(now.getFullYear());
+  const mTotal=state.expenses.filter(e=>e.date&&e.date.startsWith(ym)).reduce((s,e)=>s+Number(e.amount),0);
+  const yTotal=state.expenses.filter(e=>e.date&&e.date.startsWith(yr)).reduce((s,e)=>s+Number(e.amount),0);
+  document.getElementById('total-month').textContent='¥'+mTotal.toLocaleString();
+  document.getElementById('total-year').textContent='¥'+yTotal.toLocaleString();
+  document.getElementById('total-count').textContent=state.expenses.length;
+  const cats={};
+  state.expenses.forEach(e=>{ cats[e.cat]=(cats[e.cat]||0)+Number(e.amount); });
+  const maxV=Math.max(...Object.values(cats),1);
+  document.getElementById('cat-bars').innerHTML=Object.entries(cats).map(([cat,val],i)=>`
     <div class="bar-wrap">
-      <div class="bar-label">
-        <span style="font-size:13px">${CAT_ICONS[cat]||'💳'} ${cat}</span>
-        <span style="font-size:13px;font-weight:600">¥${val.toLocaleString()}</span>
-      </div>
-      <div class="bar-track">
-        <div class="bar-fill" style="width:${Math.round(val/maxVal*100)}%;background:${colors[i%colors.length]}"></div>
-      </div>
+      <div class="bar-label"><span>${cat}</span><span style="font-weight:600">¥${val.toLocaleString()}</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(val/maxV*100)}%;background:${CAT_COLORS[i%CAT_COLORS.length]}"></div></div>
     </div>
-  `).join('') || '<div style="font-size:13px;color:var(--color-text-secondary)">まだ記録がありません</div>';
-
-  const list = document.getElementById('expense-list');
-  if (!state.expenses.length) {
-    list.innerHTML = '<div class="empty-state"><i class="ti ti-coin"></i>まだ記録がありません</div>'; return;
-  }
-  list.innerHTML = state.expenses.slice().reverse().map(e => `
-    <div class="expense-item">
+  `).join('')||'<div style="font-size:13px;color:var(--text2)">記録なし</div>';
+  const expList=document.getElementById('expense-list');
+  if(!state.expenses.length){ expList.innerHTML='<div class="empty-state"><i class="ti ti-coin"></i>まだ記録がありません</div>'; return; }
+  expList.innerHTML=state.expenses.slice().reverse().map(e=>`
+    <div class="exp-item">
       <div class="exp-left">
-        <div class="exp-icon">${CAT_ICONS[e.cat]||'💳'}</div>
-        <div>
-          <div class="exp-name">${e.name}</div>
-          <div class="exp-cat">${e.cat} • ${e.date}${e.oshi ? ' • ' + e.oshi : ''}</div>
-        </div>
+        <div class="exp-icon">${e.cat.split(' ')[0]}</div>
+        <div><div class="exp-name">${e.name}</div><div class="exp-cat">${e.cat} • ${e.date}</div></div>
       </div>
       <div class="exp-amount">¥${Number(e.amount).toLocaleString()}</div>
     </div>
   `).join('');
 }
 
-function renderMeagues() {
-  const list = document.getElementById('meague-list');
-  if (!state.meagues.length) {
-    list.innerHTML = '<div class="empty-state"><i class="ti ti-users"></i>まだ記録がありません</div>'; return;
+// ===== MEAGUE =====
+function saveMeagueEvent(){
+  const event=document.getElementById('mg-event').value.trim();
+  if(!event) return;
+  const parts=Number(document.getElementById('mg-parts').value);
+  const mg={id:Date.now(), event, date:document.getElementById('mg-date').value,
+    parts, entries:[]};
+  state.meagues.push(mg); saveState();
+  closeModal('modal-add-meague'); renderMeagues();
+  document.getElementById('mg-event').value='';
+}
+
+function toggleMeague(id){
+  const card=document.getElementById('mgcard-'+id);
+  card.classList.toggle('open');
+}
+
+function addEntry(mgId, part){
+  const mg=state.meagues.find(m=>m.id===mgId);
+  if(!mg) return;
+  const entryId=Date.now();
+  mg.entries.push({id:entryId, part, member:'', want:'', talked:'', reflection:'', reaction:''});
+  saveState(); renderMeagues();
+  // スクロールして見せる
+  setTimeout(()=>{
+    const el=document.getElementById('entry-'+entryId);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  },50);
+  // keep open
+  setTimeout(()=>{ const c=document.getElementById('mgcard-'+mgId); if(c&&!c.classList.contains('open')) c.classList.add('open'); },0);
+}
+
+function delEntry(mgId, entryId){
+  const mg=state.meagues.find(m=>m.id===mgId);
+  if(!mg) return;
+  mg.entries=mg.entries.filter(e=>e.id!==entryId);
+  saveState(); renderMeagues();
+  setTimeout(()=>{ const c=document.getElementById('mgcard-'+mgId); if(c) c.classList.add('open'); },0);
+}
+
+function updateEntry(mgId, entryId, field, value){
+  const mg=state.meagues.find(m=>m.id===mgId);
+  if(!mg) return;
+  const entry=mg.entries.find(e=>e.id===entryId);
+  if(entry){ entry[field]=value; saveState(); }
+  // GAS送信
+  if(state.gasUrl && (field==='reaction'||field==='reflection')){
+    const mg2=state.meagues.find(m=>m.id===mgId);
+    const e2=mg2&&mg2.entries.find(e=>e.id===entryId);
+    if(e2) sendToGas('ミーグリ',
+      ['イベントID','イベント名','日付','部','メンバー','話したいこと','話したこと','反省','反応'],
+      [mgId,mg2.event,mg2.date,e2.part,e2.member,e2.want,e2.talked,e2.reflection,e2.reaction]);
   }
-  const sorted = state.meagues.slice().sort((a,b) => a.date.localeCompare(b.date));
-  list.innerHTML = sorted.map(m => `
-    <div class="meague-row">
-      <div class="meague-date">${m.date}</div>
-      <div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${m.event}</div>
-      <div><span class="pill pill-pink">${m.oshi}</span></div>
-      <div>
-        <button class="meague-note-btn" onclick="openMeagueNote(${m.id})">
-          ${(m.talked||m.reflection) ? '✏️ 編集' : '📝 記録'}
-        </button>
+}
+
+function renderMeagues(){
+  const list=document.getElementById('meague-list');
+  if(!state.meagues.length){ list.innerHTML='<div class="empty-state"><i class="ti ti-users"></i>まだ記録がありません</div>'; return; }
+  const sorted=state.meagues.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  list.innerHTML=sorted.map(mg=>{
+    const diff=daysDiff(mg.date);
+    let diffTxt='';
+    if(diff>0) diffTxt=`あと${diff}日`;
+    else if(diff===0) diffTxt='TODAY!';
+    else diffTxt=`${Math.abs(diff)}日前`;
+
+    const partsHtml=Array.from({length:mg.parts},(_,i)=>{
+      const p=i+1;
+      const entries=mg.entries.filter(e=>e.part===p);
+      const entriesHtml=entries.map(en=>`
+        <div class="mg-entry" id="entry-${en.id}">
+          <button class="mg-del-btn" onclick="delEntry(${mg.id},${en.id});event.stopPropagation()">✕</button>
+          <div class="mg-member-row">
+            <span style="font-size:11px;color:var(--text3);flex-shrink:0">メンバー：</span>
+            <input class="mg-member-input" placeholder="例: 田中さん" value="${en.member||''}"
+              onchange="updateEntry(${mg.id},${en.id},'member',this.value)"
+              onclick="event.stopPropagation()">
+          </div>
+          <div class="mg-entry-fields">
+            <div class="mg-field">
+              <label>話したいこと</label>
+              <textarea onclick="event.stopPropagation()" onchange="updateEntry(${mg.id},${en.id},'want',this.value)">${en.want||''}</textarea>
+            </div>
+            <div class="mg-field">
+              <label>話したこと</label>
+              <textarea onclick="event.stopPropagation()" onchange="updateEntry(${mg.id},${en.id},'talked',this.value)">${en.talked||''}</textarea>
+            </div>
+            <div class="mg-field">
+              <label>反省</label>
+              <textarea onclick="event.stopPropagation()" onchange="updateEntry(${mg.id},${en.id},'reflection',this.value)">${en.reflection||''}</textarea>
+            </div>
+            <div class="mg-field">
+              <label>推しの反応</label>
+              <textarea onclick="event.stopPropagation()" onchange="updateEntry(${mg.id},${en.id},'reaction',this.value)">${en.reaction||''}</textarea>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      return `<div class="mg-part-row">
+        <div class="mg-part-header">
+          <span class="mg-part-label">第${p}部</span>
+          <button class="mg-add-entry" onclick="addEntry(${mg.id},${p});event.stopPropagation()">＋ 参加を追加</button>
+        </div>
+        ${entriesHtml}
+        ${!entries.length?'<div style="font-size:12px;color:var(--text3);padding:4px 0">まだ記録なし</div>':''}
+      </div>`;
+    }).join('');
+
+    const isOpen=document.getElementById('mgcard-'+mg.id)&&document.getElementById('mgcard-'+mg.id).classList.contains('open');
+    return `<div class="mg-event-card${isOpen?' open':''}" id="mgcard-${mg.id}">
+      <div class="mg-event-header" onclick="toggleMeague(${mg.id})">
+        <div>
+          <div class="mg-event-title">🤝 ${mg.event}</div>
+          <div class="mg-event-sub">${mg.date} • ${diffTxt} • ${mg.parts}部構成</div>
+        </div>
+        <i class="ti ti-chevron-down mg-chevron"></i>
       </div>
-    </div>
-  `).join('');
+      <div class="mg-parts">${partsHtml}</div>
+    </div>`;
+  }).join('');
 }
 
-function populateOshiSelect(selId) {
-  const sel = document.getElementById(selId);
-  sel.innerHTML = '<option value="">（なし）</option>' + state.oshis.map(o => `<option value="${o.name}">${o.emoji} ${o.name}</option>`).join('');
-}
-
-function openAddOshi() { document.getElementById('modal-oshi').classList.add('open'); }
-function saveOshi() {
-  const name = document.getElementById('oshi-name-in').value.trim();
-  if (!name) return;
-  state.oshis.push({ id: Date.now(), name, group: document.getElementById('oshi-group-in').value.trim(), emoji: document.getElementById('oshi-emoji-in').value.trim() || '🌸', color: document.getElementById('oshi-color-in').value, memo: document.getElementById('oshi-memo-in').value.trim() });
-  save(); closeModal('modal-oshi'); renderOshis();
-  ['oshi-name-in','oshi-group-in','oshi-emoji-in','oshi-memo-in'].forEach(id => document.getElementById(id).value = '');
-}
-
-function openAddMemo() {
-  populateOshiSelect('memo-oshi-in');
-  const d = new Date(); document.getElementById('memo-date-in').value = d.toISOString().slice(0,10);
-  document.getElementById('modal-memo').classList.add('open');
-}
-function saveMemo() {
-  const title = document.getElementById('memo-title-in').value.trim();
-  if (!title) return;
-  state.memos.push({ id: Date.now(), title, date: document.getElementById('memo-date-in').value, oshi: document.getElementById('memo-oshi-in').value, cat: document.getElementById('memo-cat-in').value, body: document.getElementById('memo-body-in').value.trim() });
-  save(); closeModal('modal-memo'); renderMemos();
-  ['memo-title-in','memo-body-in'].forEach(id => document.getElementById(id).value = '');
-}
-
-function openAddSchedule() {
-  populateOshiSelect('sched-oshi-in');
-  const d = new Date(); document.getElementById('sched-date-in').value = d.toISOString().slice(0,10);
-  document.getElementById('modal-schedule').classList.add('open');
-}
-function saveSchedule() {
-  const title = document.getElementById('sched-title-in').value.trim();
-  if (!title) return;
-  state.schedules.push({ id: Date.now(), title, date: document.getElementById('sched-date-in').value, type: document.getElementById('sched-type-in').value, oshi: document.getElementById('sched-oshi-in').value, venue: document.getElementById('sched-venue-in').value.trim(), note: document.getElementById('sched-note-in').value.trim() });
-  save(); closeModal('modal-schedule'); renderSchedules();
-  ['sched-title-in','sched-venue-in','sched-note-in'].forEach(id => document.getElementById(id).value = '');
-}
-
-function openAddExpense() {
-  populateOshiSelect('exp-oshi-in');
-  const d = new Date(); document.getElementById('exp-date-in').value = d.toISOString().slice(0,10);
-  document.getElementById('modal-expense').classList.add('open');
-}
-function saveExpense() {
-  const name = document.getElementById('exp-name-in').value.trim();
-  const amount = Number(document.getElementById('exp-amount-in').value);
-  if (!name || !amount) return;
-  state.expenses.push({ id: Date.now(), name, amount, date: document.getElementById('exp-date-in').value, cat: document.getElementById('exp-cat-in').value, oshi: document.getElementById('exp-oshi-in').value });
-  save(); closeModal('modal-expense'); renderFinance();
-  ['exp-name-in','exp-amount-in'].forEach(id => document.getElementById(id).value = '');
-}
-
-function openAddMeague() {
-  populateOshiSelect('mg-oshi-in');
-  const d = new Date(); document.getElementById('mg-date-in').value = d.toISOString().slice(0,10);
-  document.getElementById('modal-meague').classList.add('open');
-}
-function saveMeague() {
-  const event = document.getElementById('mg-event-in').value.trim();
-  if (!event) return;
-  state.meagues.push({ id: Date.now(), event, date: document.getElementById('mg-date-in').value, oshi: document.getElementById('mg-oshi-in').value, want: document.getElementById('mg-want-in').value.trim(), talked: '', reflection: '', reaction: '' });
-  save(); closeModal('modal-meague'); renderMeagues();
-  ['mg-event-in','mg-want-in'].forEach(id => document.getElementById(id).value = '');
-}
-
-function openMeagueNote(id) {
-  const m = state.meagues.find(x => x.id === id);
-  if (!m) return;
-  editingMeagueId = id;
-  document.getElementById('mg-note-header').textContent = `${m.date} • ${m.event} (${m.oshi})`;
-  document.getElementById('mg-note-want').value = m.want || '';
-  document.getElementById('mg-note-talked').value = m.talked || '';
-  document.getElementById('mg-note-reflection').value = m.reflection || '';
-  document.getElementById('mg-note-reaction').value = m.reaction || '';
-  document.getElementById('modal-meague-note').classList.add('open');
-}
-function saveMeagueNote() {
-  const m = state.meagues.find(x => x.id === editingMeagueId);
-  if (!m) return;
-  m.want = document.getElementById('mg-note-want').value.trim();
-  m.talked = document.getElementById('mg-note-talked').value.trim();
-  m.reflection = document.getElementById('mg-note-reflection').value.trim();
-  m.reaction = document.getElementById('mg-note-reaction').value.trim();
-  save(); closeModal('modal-meague-note'); renderMeagues();
-}
-
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', e => { if(e.target === el) el.classList.remove('open'); });
-});
-
-render();
+renderAll();
 </script>
+</body>
+</html>
